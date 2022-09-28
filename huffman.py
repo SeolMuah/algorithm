@@ -50,10 +50,11 @@ out_str = ''.join([encode_dic[ch] for ch in in_str])
 print(out_str)
 
 
+#--------------decoding-----------------#
 encode_list = [(k,v) for k,v in encode_dic.items()]
 encode_list.sort(key=lambda x: (x[0]))
 
-#decoding
+
 decoded_str = ""
 word = ""
 for ch in out_str:
