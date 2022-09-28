@@ -1,12 +1,18 @@
 from collections import Counter
 
+in_str = 'ABCDEFGHIJKLMNOP'
+in_str = 'aaabrbacard'
 in_str = 'AAAAAAABBCCCDEEEEFFFFFFG'
-# in_str = 'aaabrbacard'
 str_list = list(in_str)
 str_count = Counter(str_list)
 str_count = [[v,k] for k, v in str_count.items()]
 str_count.sort(key=lambda x: x[0],reverse=True)
 encode_dic = {v:[] for k, v in str_count}
+
+import numpy as np
+total = sum([e[0] for e in str_count])
+prob = {e[1] : e[0]/total  for e in str_count}
+entropy = sum([-np.log2(e[0]/total) *e[0]/total  for e in str_count])
 
 
 def encode_func(n_list, num) :
@@ -42,7 +48,7 @@ while len(str_count) != 1 :
     str_count.sort(key=lambda x: (x[0], get_child_node_num(x)), reverse=True)
     print(str_count)
 
-print(encode_dic, sum([len(e) for e in encode_dic.values()]))
+print(encode_dic, f"총 비트 길이 {sum([len(e) for e in encode_dic.values()])}, 평균 길이 : {sum([len(v)*prob[k] for k,v in encode_dic.items()])}, 엔트로피 : {entropy}")
 encode_dic = {k : ''.join([str(i) for i in v]) for k,v in encode_dic.items()}
 print(encode_dic)
 
@@ -50,11 +56,10 @@ out_str = ''.join([encode_dic[ch] for ch in in_str])
 print(out_str)
 
 
-#--------------decoding-----------------#
 encode_list = [(k,v) for k,v in encode_dic.items()]
 encode_list.sort(key=lambda x: (x[0]))
 
-
+#decoding
 decoded_str = ""
 word = ""
 for ch in out_str:
@@ -65,6 +70,3 @@ for ch in out_str:
             word = ""
             break
 print(decoded_str)
-
-
-
